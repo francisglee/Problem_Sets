@@ -128,3 +128,53 @@ ax.set_xlabel('Sample Size')
 ax.set_ylabel('Values')
 
 plt.show()
+
+# Problem Set 1C: Probability Distributions and hypothesis testing 
+
+%matplotlib inline
+
+import math 
+import numpy as np
+from matplotlib import pyplot as plt
+
+# binomial coefficient
+n = 4 # total number drawn           
+THETA = 0.4 # success
+
+# parameters
+# AT_OCCURRENCE = 10
+# SPREAD = [10, 15]
+
+def bin(n, THETA):
+    """returns the binomial distribution Mass distribution for items in N"""
+    bin_list = [] # distribution list 
+    for x in range(0, n + 1):
+        # issues with long
+        temp1 = math.factorial(n)
+        temp2 = math.factorial(x)
+        temp3 = math.factorial(n - x)
+        binomial_coefficient = temp1/(temp2 * temp3)
+        bin_list.append(binomial_coefficient * (THETA**x) * (1 - THETA)**(n - x))
+    return bin_list
+
+pmf = bin(N, THETA) # probability mass function distribution; also yrange
+
+for item in pmf:
+    print "N:", pmf.index(item), item
+
+def choose(top, bottom):
+    """returns top!/(bottom!(top-bottom)!)"""
+    return float((math.factorial(top)))/((math.factorial(bottom))*(math.factorial(top - bottom)))
+    
+def hypergeo(K, N, n, k):
+    """returns the hypergeometric probability of k success, out of n samples drawn, given N total samples and K success samples"""
+    a = choose(K, k)
+    b = choose(N - K, n - k)
+    c = choose(N, n)
+    return (a * b)/c
+
+start = hypergeo(4, 10, 4, 3)
+end = hypergeo(4, 10, 4, 4)
+
+# print start, end
+print "The probability of drawing 3 or more marbles using a hypergeometric distribution is:", start + end
