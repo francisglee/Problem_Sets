@@ -87,3 +87,44 @@ plt.ylabel('Probability')
 plt.title('Binomial Distribution')
 
 plt.show()
+
+# Problem Set 1B: Probability Distributions and hypothesis testing 
+
+# Plot a box-plot of the mean values for each value of N
+
+%matplotlib inline
+
+import math 
+import numpy as np
+from matplotlib import pyplot as plt
+
+N = [10, 100, 1000, 10000]
+
+ten, hundred, thousand, ten_thousand = [], [], [], []
+
+# random sampling from a normal distribution
+for int in range(0, 1000): # repeat 1000X
+    for index, sample_size in enumerate(N):
+        sampling = np.random.normal(5, 5, sample_size) # mean: 5, stdev: 5, sample size: N[index]
+        if index == 0:
+            ten.extend(sampling)
+        elif index == 1:
+            hundred.extend(sampling)
+        elif index == 2:
+            thousand.extend(sampling)
+        else:
+            ten_thousand.extend(sampling)
+        
+# Plot box-plots for each sample size in N
+data = [ten, hundred, thousand, ten_thousand]
+labels = ['10', '100', '1000', '10000']
+
+fig = plt.figure()
+fig.suptitle('Mean Value for Sample Size 10', fontsize=14, fontweight='bold')
+ax = fig.add_subplot(111)
+plt.boxplot(data, labels = labels, showmeans = True)
+
+ax.set_xlabel('Sample Size')
+ax.set_ylabel('Values')
+
+plt.show()
