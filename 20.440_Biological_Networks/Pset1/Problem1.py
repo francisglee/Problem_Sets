@@ -33,7 +33,10 @@ pmf = bin(N, THETA)
 total_sum = 0
 for element in pmf:
     total_sum += element
-print "Total probability sums up to:", total_sum
+if total_sum == 1:
+    print "Total probability sums up to:", total_sum
+else: # TODO: This is broken
+    print "Total probability sums up to:", total_sum, "\nIt needs to be 1.0" 
 # BOTH Exception and assert below don't work!
 # if total_sum != 1:
 #     raise Exception, "Your probabilities don't add up to 1!"
@@ -44,6 +47,8 @@ for element in pmf:
         counter += 1
 if counter == 0:
     print "All probabilities are non-negative!"
+else:
+    print "You cannot have negative probabilities :("
         
 print "The Probability of having", AT_OCCURRENCE, "A's or T's given:\n- Sequence window length of", N, "bp\n- GC probability of", 1 - THETA, "\n- AT probability of", THETA, "\nis:", pmf[AT_OCCURRENCE]
 
