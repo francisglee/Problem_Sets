@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+'''
+Problem Set 1Cb: Probability Distributions and hypothesis testing 
+Manually calculate exactly the probability of drawing 3 or more red marbles from a bag of 10 marbles, 4 of which are red, using the hypergeometric distribution.
+'''
+import math
+
+def choose(n, k):
+    """returns n choose k: n!/(k!(n - k)!)"""
+    f = math.factorial
+    return f(n) / f(k) / f(n - k)
+
+def hypergeo(K, N, n, k):
+    """returns the hypergeometric probability of k success, out of n samples drawn, given N total samples and K success samples"""
+    a = choose(K, k)
+    b = choose(N - K, n - k)
+    c = choose(N, n)
+    return float((a * b))/c
+
+# define parameters for binomial distribution
+n     = 4 # total number of marbles drawn           
+k_set = [3, 4] # desired successes; we want >= 3 red marbles and there's 4 total red marbles
+N     = 10 # total number of marbles
+K     = 4 # total number of red marbles
+
+# define solution
+sltn_1Cb = 0
+
+# find hypergeometric probabilities of k_set
+for item in k_set:
+    sltn_1Cb += hypergeo(K, N, n, item)
+
+# print results
+print "The hypergeometric probability of drawing", k_set[0], "to", k_set[-1], "red marbles from a bag given:\n- Total number of marbles: 10\n- Total number of red marbles: 4\nis:", sltn_1Cb
