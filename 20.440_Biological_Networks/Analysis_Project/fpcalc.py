@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # Francis G. Lee    4/8/2016
-# isidrolauscher@gmail.com
+# francis.g.lee@gmail.com
 
 #####################################
 # Import Modules
