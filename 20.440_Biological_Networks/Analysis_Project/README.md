@@ -1,4 +1,4 @@
-# Rosalind Bioinformatics #
+# HTS hit prediction using molecular fingerprint cluster data #
 
 ### Description
 ---
