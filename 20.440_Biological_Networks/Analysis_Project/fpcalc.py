@@ -31,24 +31,24 @@ parser.add_argument('-output', required='TRUE', type=str, help="Name of the outp
 args = vars(parser.parse_args())
 #############
 
-image=args['image']
-unhashed=args['unhashed']
-nbBits=int(args['bits'])
-radii = list(args['radii'])
-fileMols=str(args['mols'])
+image    = args['image']
+unhashed = args['unhashed']
+nbBits   = int(args['bits'])
+radii    = list(args['radii'])
+fileMols = str(args['mols'])
 
 # External file.
-fileMolsEXT=args['molsEXT']
-unhashedEXT=args['unhashedEXT']
-RDkitPath=args['RDkitPath']
-outname=args['output']
+fileMolsEXT = args['molsEXT']
+unhashedEXT = args['unhashedEXT']
+RDkitPath   = args['RDkitPath']
+outname     = args['output']
 sys.path.append(RDkitPath)
 
 #############
 # Classes
 #############
 
-def RetrieveMol2Block(fileLikeObject, delimiter="@<TRIPOS>MOLECULE"):
+def RetrieveMol2Block(fileLikeObject, delimiter = "@<TRIPOS>MOLECULE"):
     """generator which retrieves one mol2 block at a time
     """
     mol2 = []
@@ -62,22 +62,22 @@ def RetrieveMol2Block(fileLikeObject, delimiter="@<TRIPOS>MOLECULE"):
 
 
 class load_molecules:    
-    def __init__(self,input_file,verbose=True,delimiter="\t",name_field="_Name"):
-        self.input_file = input_file
-        self.verbose = True
-        self.delimiter = delimiter
+    def __init__(self, input_file, verbose = True, delimiter = "\t", name_field = "_Name"):
+        self.input_file           = input_file
+        self.verbose              = True
+        self.delimiter            = delimiter
         file_name, file_extension = _splitext(input_file)
-        self.file_name = file_name
-        self.file_extension = file_extension
-        if(file_extension not in ['.smi','.smiles','.sdf','.mol2']): 
+        self.file_name            = file_name
+        self.file_extension       = file_extension
+        if(file_extension not in ['.smi', '.smiles', '.sdf', '.mol2']): 
             raise ValueError("Incorrect file extension")
-        self.mols = []
-        self.molserr = []
-        self.nb_mols = None
-        self.mols_ids = []
+        self.mols       = []
+        self.molserr    = []
+        self.nb_mols    = None
+        self.mols_ids   = []
         self.name_field = name_field
         
-    def read_molecules(self,titleLine=False,smilesColumn=0,nameColumn=1): #titleLine for smiles
+    def read_molecules(self, titleLine = False, smilesColumn = 0, nameColumn = 1): #titleLine for smiles
 
         if self.file_extension in ['.smi','.smiles']:
             if self.verbose:
