@@ -16,22 +16,10 @@ print time.asctime()
 file = "AID2098wSMILES (corrected).csv" # define file that you want to use
 
 original_df = pd.read_csv(file, delimiter = ",")
-testing_df  = pd.DataFrame(original_df.loc[ : 20000, "SMILES"])
+testing_df  = pd.DataFrame(original_df.loc[0 : 5, "SMILES"])
 df          = testing_df
 
 print "size =", df.size, "shape =", df.shape, "indexes =", df.index, "columns =", df.columns # check to make sure the right df proceeds
-
-''' THIS PART MIGHT NOT BE NECESSARY
-# create a new column in df called pSMILES, mols, and ECFP-2
-dfLength = len(df.index)
-print "dfLength =", dfLength
-
-df["pSMILES"] = pd.Series(np.zeros(dfLength), index = df.index)
-df["mol"]     = pd.Series(np.zeros(dfLength), index = df.index) 
-df["ECFP-2"]  = pd.Series(np.zeros(dfLength), index = df.index)
-
-print "size =", df.size, "shape =", df.shape, "indexes =", df.index, "columns =", df.columns # check to make sure the right df proceeds
-'''
 
 # TODO: Make this all work in one loop...	
 for index, row in df.iterrows():
@@ -45,8 +33,9 @@ for index, row in df.iterrows():
     else:
         df.loc[index, "pSMILES"] = row["SMILES"].split(".")[0]
 
-    df.loc[index, "mol"]      = Chem.MolFromSmiles(df.loc[index, "pSMILES"]) 
-    df.loc[index, "ECFP-2"]   = AllChem.GetMorganFingerprintAsBitVect(df.loc[index, "mol"], 2, nBits = 1024).ToBitString() # radius of 2
+    df.loc[index, "mol"]         = Chem.MolFromSmiles(df.loc[index, "pSMILES"]) 
+    df.loc[index, "ECFP-2"]      = AllChem.GetMorganFingerprint(df.loc[index, "mol"], 2) # radius of 2
+    # df.loc[index, "ECFPbvs-2"]   = AllChem.GetMorganFingerprintAsBitVect(df.loc[index, "mol"], 2, nBits = 1024).ToBitString() # radius of 2
     # df.loc[index, "Daylight"] = FingerprintMols.FingerprintMol(df.loc[index, "mol"])
 
 print "size =", df.size, "shape =", df.shape, "indexes =", df.index, "columns =", df.columns # check to make sure the right df proceeds
@@ -56,13 +45,38 @@ df.to_csv('SMILEStoFingerprints_ECFP-2.csv')
 
 tock = time.clock()
 print time.asctime()
-print "Run time for Preprocessing: ", tock - tic
+print "Run time for Preprocessing (hr): ", (tock - tic)/60
 
-# # compute distance matrix for every Fingerprint type in df
-# columns       = list(df.columns.values)
-# index         = list(df.columns.values)
+# compute distance matrix for every Fingerprint type in df
+columns       = list(df.index)
+indexes       = list(df.index)
+# print columns, indexes
 # dist_mat_dict = {}
 # df['previous_year'] = [row-1 for row in df['year']]
 
-# dist_mat = pd.DataFrame(index = index, columns = columns) # filled with Nans
+dist_mat = pd.DataFrame(index = indexes, columns = columns) # filled with Nans
+# print dist_mat
+
+for index, row in dist_mat.iterrows(): # for each for
+
+	if index % 10000 == 0: # spot check on terminal
+    	print "DataMATRIX: We're currently processing index", index, time.asctime()
+
+    counter = 0 # compute only half table
+
+	# print "I am here:", index, row
+	for item in columns:		
+		if item < counter:
+			continue
+		else:
+			# print "for row", index, "and column", item
+			# print " and now i'm here:", df.loc[index, 'ECFP-2'], df.loc[item, 'ECFP-2']
+			dist_mat.loc[index, item] = DataStructs.TanimotoSimilarity(df.loc[index, 'ECFP-2'], df.loc[item, 'ECFP-2'])
+		counter += 1
+
+# lets export distance matrix
+dist_mat.to_csv('Tanimoto_Distance_matrix_ECFP-2.csv')
+
+
+
 
