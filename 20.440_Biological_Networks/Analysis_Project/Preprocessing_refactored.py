@@ -45,10 +45,10 @@ for index, row in df.iterrows():
     else:
         df.loc[index, "pSMILES"] = row["SMILES"].split(".")[0]
 
+    df.loc[index, "mol"]      = Chem.MolFromSmiles(df.loc[index, "pSMILES"]) 
+    df.loc[index, "ECFP-2"]   = AllChem.GetMorganFingerprintAsBitVect(df.loc[index, "mol"], 2, nBits = 1024).ToBitString() # radius of 2
+    # df.loc[index, "Daylight"] = FingerprintMols.FingerprintMol(df.loc[index, "mol"])
 
-	df.loc[index, "mol"]      = Chem.MolFromSmiles(df.loc[index, "pSMILES"]) 
-	df.loc[index, "ECFP-2"]   = AllChem.GetMorganFingerprintAsBitVect(df.loc[index, "mol"], 2, nBits = 1024).ToBitString() # radius of 2
-	# df.loc[index, "Daylight"] = FingerprintMols.FingerprintMol(df.loc[index, "mol"])
 print "size =", df.size, "shape =", df.shape, "indexes =", df.index, "columns =", df.columns # check to make sure the right df proceeds
 
 # let's export this data as a CSV
