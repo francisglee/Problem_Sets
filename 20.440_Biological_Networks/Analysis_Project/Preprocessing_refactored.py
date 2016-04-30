@@ -57,22 +57,22 @@ indexes       = list(df.index)
 dist_mat = pd.DataFrame(index = indexes, columns = columns) # filled with Nans
 # print dist_mat
 
+counter = 0 # compute only half table
 for index, row in dist_mat.iterrows(): # for each for
 
-	if index % 10000 == 0: # spot check on terminal
+    if index % 10000 == 0: # spot check on terminal
     	print "DataMATRIX: We're currently processing index", index, time.asctime()
 
-    counter = 0 # compute only half table
-
-	# print "I am here:", index, row
-	for item in columns:		
-		if item < counter:
-			continue
-		else:
-			# print "for row", index, "and column", item
-			# print " and now i'm here:", df.loc[index, 'ECFP-2'], df.loc[item, 'ECFP-2']
-			dist_mat.loc[index, item] = DataStructs.TanimotoSimilarity(df.loc[index, 'ECFP-2'], df.loc[item, 'ECFP-2'])
-		counter += 1
+    # print "I am here:", index, row
+    for item in columns:		
+	if item < counter:
+	    continue
+	else:
+	    # print "for row", index, "and column", item
+	    # print " and now i'm here:", df.loc[index, 'ECFP-2'], df.loc[item, 'ECFP-2']
+	    dist_mat.loc[index, item] = DataStructs.TanimotoSimilarity(df.loc[index, 'ECFP-2'], df.loc[item, 'ECFP-2'])
+	
+    counter += 1
 
 # lets export distance matrix
 dist_mat.to_csv('Tanimoto_Distance_matrix_ECFP-2.csv')
